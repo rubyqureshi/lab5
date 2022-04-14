@@ -10,8 +10,8 @@ main()
     //pipefd[1] - write
 
     int pid;
-    char writemessages[2][30]={"Hi", "Hello"};
-    char readmessage[30];
+    char writemessages[2][10]={"Hi", "Hello"};
+    char readmessage[20];
     
     int returnstatus = pipe(pipefd);
     
