@@ -6,8 +6,11 @@ void
 main()
 {
     int pipefds[2];
-    int pid;
+    // int pid;
 
     int returnstatus = pipe(pipefds);
+    if (returnstatus == -1){
+        printf("Unable to create pipe\n");
+    }
     exit(0);
 }
