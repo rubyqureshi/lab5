@@ -7,8 +7,8 @@ main()
 {
     int pipefds[2];
     int pid;
-    char writemessages[2][20]={"Hi", "Hello"};
-    char readmessage[20];
+    char writemessages[2][30]={"Hi", "Hello"};
+    char readmessage[30];
     
     int returnstatus = pipe(pipefds);
     
@@ -24,9 +24,11 @@ main()
     // Child process
     if (pid == 0) {
         read(pipefds[0], readmessage, sizeof(readmessage));
-        printf("Child reading msg from pipe: %s\n", readmessage);
-        read(pipefds[0], readmessage, sizeof(readmessage));
-        printf("Child Process - Reading from pipe - Message 2 is %s\n", readmessage);
+        // printf("Child reading msg from pipe: %s\n", readmessage);
+        // read(pipefds[0], readmessage, sizeof(readmessage));
+        // printf("Child Process - Reading from pipe - Message 2 is %s\n", readmessage);
+        printf("Child write - Message %s\n",writemessages[1]);
+        write(pipefds[0], writemessages[1], sizeof(writemessages[1]));
     } 
     else { //Parent process
         printf("Message from parent : %s\n", writemessages[0]);
