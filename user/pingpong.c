@@ -36,9 +36,6 @@ main()
         write(pipefd[1], writemessages[0], sizeof(writemessages[0]));
         close(pipefd[1]);
         
-        close(pipefd[1]);
-        read(pipefd[0], readmessage, sizeof(readmessage));        
-        
         //printf("Child reading msg : %s\n", readmessage);
         // read(pipefd[0], readmessage, sizeof(readmessage));
         // printf("Child Process - Reading from pipe - Message 2 is %s\n", readmessage);
