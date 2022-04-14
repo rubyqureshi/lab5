@@ -2,7 +2,7 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 
-int
+void
 main()
 {
     int pipefd[2]; 
@@ -10,7 +10,7 @@ main()
     //pipefd[1] - write
 
     int pid;
-    char writemessages[2][10]={"Hi", "Hello"};
+    char writemessages[2][20]={"Hi", "Hello"};
     char readmessage[20];
     
     int returnstatus = pipe(pipefd);
@@ -18,7 +18,6 @@ main()
     if (returnstatus == -1){
         printf("Unable to create pipe\n");
         exit(0);
-        return 0;
     }
     else{
         printf("Successfully established a single pipe.\n\n");
@@ -27,7 +26,7 @@ main()
     pid = fork();
     if (pid < 0){
         printf("fork unsuccessful.");
-        return 0;
+        exit(0);
     }
 
     // parent process
@@ -61,5 +60,5 @@ main()
  
 
 
-    return 1;
+    exit(1);
 }
