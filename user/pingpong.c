@@ -28,7 +28,7 @@ main()
     // parent process
     if (pid > 0) {
         close(pipefd[0]);
-        write(pipefd[0], readmessage, sizeof(readmessage));
+        write(pipefd[1], writemessages[0], sizeof(writemessages[0]));
         close(pipefd[1]);
         
         
