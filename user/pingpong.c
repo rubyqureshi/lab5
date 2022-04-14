@@ -5,7 +5,10 @@
 void
 main()
 {
-    int pipefd[2];
+    int pipefd[2]; 
+    //pipefd[0] - read end
+    //pipefd[1] - write
+
     int pid;
     char writemessages[2][30]={"Hi", "Hello"};
     char readmessage[30];
@@ -22,20 +25,30 @@ main()
 
     pid = fork();
 
-    // Child process
-    if (pid == 0) {
-        read(pipefd[0], readmessage, sizeof(readmessage));
-        printf("Child reading msg : %s\n", readmessage);
+    // parent process
+    if (pid > 0) {
+        close(pipefd[0]);
+        write(pipefd[0], readmessage, sizeof(readmessage));
+        close(pipefd[1]);
+        
+        
+        //printf("Child reading msg : %s\n", readmessage);
         // read(pipefd[0], readmessage, sizeof(readmessage));
         // printf("Child Process - Reading from pipe - Message 2 is %s\n", readmessage);
         // printf("Child write - Message %s\n",writemessages[1]);
         // write(pipefd[0], writemessages[1], sizeof(writemessages[1]));
     }
-    //Parent process
-    else {
-        //close(pipefd[0]);
+    //child process
+    else if (pid == 0) {
+        close(pipefd[1]);
+        read(pipefd[0], readmessage, sizeof(readmessage));
+        close(pipefd[0]);
+        printf("Message from parent %s\n", readmessage);
+        
+        
         // printf("Message from parent : %s\n", writemessages[0]);
-        write(pipefd[1], writemessages[0], sizeof(writemessages[0]));
+        //write(pipefd[1], writemessages[0], sizeof(writemessages[0]));
+        //close(pipefd[1]);
         // wait(6);
         // printf("Parent Process - Writing to pipe - Message 2 is %s\n", writemessages[1]);
         // write(pipefd[1], writemessages[1], sizeof(writemessages[1]));
