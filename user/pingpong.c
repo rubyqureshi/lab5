@@ -46,7 +46,7 @@ main()
         close(pipefd[1]);
         read(pipefd[0], readmessage, sizeof(readmessage));
         close(pipefd[0]);
-        printf("Message from parent: %s\n", readmessage);
+        printf("Message from parent: %s\n\n", readmessage);
         
         
         // printf("Message from parent : %s\n", writemessages[0]);
@@ -56,7 +56,7 @@ main()
         // printf("Parent Process - Writing to pipe - Message 2 is %s\n", writemessages[1]);
         // write(pipefd[1], writemessages[1], sizeof(writemessages[1]));
     }
-
+    wait(10);
     if (pid == 0) {
         close(pipefd[0]);
         write(pipefd[1], writemessages[1], sizeof(writemessages[1]));
