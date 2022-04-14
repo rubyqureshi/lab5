@@ -24,9 +24,9 @@ main()
     // Child process
     if (pid == 0) {
         read(pipefds[0], readmessage, sizeof(readmessage));
-        printf("Child Process - Reading from pipe – Message 1 is %s\n", readmessage);
+        printf("Child Process - Reading from pipe - Message 1 is %s\n", readmessage);
         read(pipefds[0], readmessage, sizeof(readmessage));
-        printf("Child Process - Reading from pipe – Message 2 is %s\n", readmessage);
+        printf("Child Process - Reading from pipe - Message 2 is %s\n", readmessage);
     } 
     else { //Parent process
         printf("Parent Process - Writing to pipe - Message 1 is %s\n", writemessages[0]);
