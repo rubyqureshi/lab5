@@ -2,7 +2,7 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 
-void
+int
 main()
 {
     int pipefd[2]; 
@@ -18,12 +18,17 @@ main()
     if (returnstatus == -1){
         printf("Unable to create pipe\n");
         exit(0);
+        return 0;
     }
     else{
-        printf("Successfully established a single pipe.\n");
+        printf("Successfully established a single pipe.\n\n");
     }
 
     pid = fork();
+    if (pid < 0){
+        printf("fork unsuccessful.");
+        return 0;
+    }
 
     // parent process
     if (pid > 0) {
@@ -31,6 +36,8 @@ main()
         write(pipefd[1], writemessages[0], sizeof(writemessages[0]));
         close(pipefd[1]);
         
+        close(pipefd[1]);
+        read(pipefd[0], readmessage, sizeof(readmessage));        
         
         //printf("Child reading msg : %s\n", readmessage);
         // read(pipefd[0], readmessage, sizeof(readmessage));
@@ -43,7 +50,7 @@ main()
         close(pipefd[1]);
         read(pipefd[0], readmessage, sizeof(readmessage));
         close(pipefd[0]);
-        printf("Message from parent %s\n", readmessage);
+        printf("Message from parent: %s\n", readmessage);
         
         
         // printf("Message from parent : %s\n", writemessages[0]);
@@ -54,6 +61,26 @@ main()
         // write(pipefd[1], writemessages[1], sizeof(writemessages[1]));
     }
 
+    if (pid == 0) {
+        write(pipefd[1], writemessages[1], sizeof(writemessages[1]));
+        close(pipefd[1]);      
+        
+    }
+    //child process
+    else if (pid > 0) {
+        close(pipefd[1]);
+        read(pipefd[0], readmessage, sizeof(readmessage));
+        close(pipefd[0]);
+        printf("Message from child: %s\n", readmessage);
+        
+        // printf("Message from parent : %s\n", writemessages[0]);
+        //write(pipefd[1], writemessages[0], sizeof(writemessages[0]));
+        //close(pipefd[1]);
+        // wait(6);
+        // printf("Parent Process - Writing to pipe - Message 2 is %s\n", writemessages[1]);
+        // write(pipefd[1], writemessages[1], sizeof(writemessages[1]));
+    }
 
-    exit(0);
+
+    return 1;
 }
