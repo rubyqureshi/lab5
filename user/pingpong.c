@@ -11,11 +11,11 @@ main()
 
     int pid;
     char writemessages[2][20]={"Hi", "Hello"};
-    char readmessage[20];
+    char readmsg[20];
     
-    int returnstatus = pipe(pipefd);
+    int buildstatus = pipe(pipefd);
     
-    if (returnstatus == -1){
+    if (buildstatus == -1){
         printf("Unable to create pipe\n");
         exit(0);
     }
@@ -29,56 +29,32 @@ main()
         exit(0);
     }
 
-    // parent process
+    // parent process writes
     if (pid > 0) {
-        close(pipefd[0]);
         write(pipefd[1], writemessages[0], sizeof(writemessages[0]));
-        close(pipefd[1]);
         
-        //printf("Child reading msg : %s\n", readmessage);
-        // read(pipefd[0], readmessage, sizeof(readmessage));
-        // printf("Child Process - Reading from pipe - Message 2 is %s\n", readmessage);
-        // printf("Child write - Message %s\n",writemessages[1]);
-        // write(pipefd[0], writemessages[1], sizeof(writemessages[1]));
     }
-    //child process
+    //child process reads
     else if (pid == 0) {
-        close(pipefd[1]);
-        read(pipefd[0], readmessage, sizeof(readmessage));
-        close(pipefd[0]);
-        printf("Message from parent: %s\n\n", readmessage);
+        read(pipefd[0], readmsg, sizeof(readmsg));
+        printf("%d Message from parent: %s\n",(int) getpid(), readmsg);
         
-        
-        // printf("Message from parent : %s\n", writemessages[0]);
-        //write(pipefd[1], writemessages[0], sizeof(writemessages[0]));
-        //close(pipefd[1]);
-        // wait(6);
-        // printf("Parent Process - Writing to pipe - Message 2 is %s\n", writemessages[1]);
-        // write(pipefd[1], writemessages[1], sizeof(writemessages[1]));
     }
-    wait(10*);
+    sleep(5);
+
+    //child process writes
     if (pid == 0) {
-        close(pipefd[0]);
-        write(pipefd[1], writemessages[1], sizeof(writemessages[1]));
-        close(pipefd[1]);      
+        write(pipefd[1], writemessages[1], sizeof(writemessages[1]));    
         
     }
-    //child process
+    //parent process reads
     else if (pid > 0) {
-        close(pipefd[1]);
-        read(pipefd[0], readmessage, sizeof(readmessage));
-        close(pipefd[0]);
-        printf("Message from child: %s\n", readmessage);
-        
-        // printf("Message from parent : %s\n", writemessages[0]);
-        //write(pipefd[1], writemessages[0], sizeof(writemessages[0]));
-        //close(pipefd[1]);
-        // wait(6);
-        // printf("Parent Process - Writing to pipe - Message 2 is %s\n", writemessages[1]);
-        // write(pipefd[1], writemessages[1], sizeof(writemessages[1]));
+        read(pipefd[0], readmsg, sizeof(readmsg));
+        printf("%d Message from child: %s\n", (int) getpid(), readmsg);
+
     }
 
- 
+    sleep (5);
 
 
     exit(1);
